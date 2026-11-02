@@ -23,14 +23,8 @@ a { color: inherit; text-decoration: none; }
   display: flex; align-items: center; justify-content: space-between;
   padding: 0 clamp(22px, 6vw, 96px); border-bottom: 1px solid rgba(221, 245, 239, .13);
 }
-.brand { display: inline-flex; gap: 12px; align-items: center; white-space: nowrap; }
-.brand-mark { position: relative; width: 30px; height: 34px; border: 1.5px solid var(--aqua); border-radius: 80% 12% 76% 25%; transform: rotate(-42deg); box-shadow: 0 0 22px rgba(71, 210, 218, .22); }
-.brand-mark::before, .brand-mark::after, .brand-mark span { content: ""; position: absolute; display: block; border-radius: 99px; }
-.brand-mark::before { width: 1px; height: 24px; background: var(--aqua); left: 14px; top: 4px; transform: rotate(42deg); }
-.brand-mark::after { width: 8px; height: 1px; background: var(--green); left: 11px; top: 15px; transform: rotate(-20deg); }
-.brand-mark span { width: 8px; height: 1px; background: var(--aqua); left: 14px; top: 20px; transform: rotate(-20deg); }
-.brand-name { font: 700 16px/1 "Manrope", sans-serif; letter-spacing: .14em; }
-.brand-name b { color: var(--green); }
+.brand { display: inline-flex; align-items: center; white-space: nowrap; }
+.official-logo { display: block; width: 118px; height: 90px; object-fit: contain; background: #fff; }
 .nav-links { display: flex; gap: 38px; margin-left: 90px; color: rgba(239, 250, 249, .78); font-size: 13px; }
 .nav-links a, .text-link { transition: color .2s ease; }
 .nav-links a:hover, .text-link:hover { color: var(--green); }
@@ -120,7 +114,7 @@ h1, h2 { font-family: "Manrope", sans-serif; }
 .safety-note { max-width: 850px; margin: 26px 0 0; color: #9eb7b8; font-size: 11px; line-height: 1.8; }
 .safety-note span { color: var(--green); margin-right: 7px; }
 .site-footer { display: flex; align-items: center; justify-content: space-between; gap: 20px; min-height: 99px; padding: 20px clamp(24px, 6vw, 96px); border-top: 1px solid rgba(221, 245, 239, .12); background: #061b26; color: #a5b9bb; font-size: 10px; }
-.site-footer .brand-name { color: var(--ink); font-size: 13px; }.site-footer .brand-mark { transform: scale(.82) rotate(-42deg); }
+.site-footer .official-logo { width: 105px; height: 80px; }
 .footer-concept { color: #7f9a9e; }
 
 @keyframes drone-hover { 0%,100% { margin-top: 0; } 50% { margin-top: -12px; } }
@@ -151,8 +145,7 @@ h1, h2 { font-family: "Manrope", sans-serif; }
 }
 @media (max-width: 620px) {
   .site-header { height: 70px; padding-inline: 20px; }
-  .brand { gap: 8px; }.brand-mark { width: 25px; height: 28px; }.brand-mark::before { left: 11px; height: 20px; }.brand-mark::after { left: 8px; top: 12px; }.brand-mark span { left: 11px; top: 17px; }
-  .brand-name { font-size: 12px; letter-spacing: .1em; }
+  .official-logo { width: 89px; height: 68px; }
   .nav-links { display: none; }
   .header-cta { padding: 10px 11px; gap: 9px; font-size: 9px; }
   .hero { height: auto; min-height: 890px; }
@@ -198,3 +191,51 @@ h1, h2 { font-family: "Manrope", sans-serif; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }
+
+/* A fixed water column sits behind the page; its layers travel at different rates on scroll. */
+.scroll-water-bg {
+  position: fixed; z-index: 0; inset: 0; overflow: hidden; pointer-events: none;
+  background: radial-gradient(ellipse at 76% 22%, rgba(54, 130, 131, .22), transparent 40%),
+    radial-gradient(ellipse at 12% 83%, rgba(34, 105, 121, .2), transparent 38%), #061b26;
+}
+.scroll-water-bg::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(90deg, rgba(3, 17, 24, .21), transparent 38%, rgba(3, 17, 24, .12)),
+    linear-gradient(0deg, rgba(3, 17, 24, .32), transparent 36%, rgba(3, 17, 24, .18));
+}
+.scroll-water-bg > span { position: absolute; display: block; inset: -24%; will-change: transform; }
+.water-caustics {
+  opacity: .27;
+  background: radial-gradient(ellipse at 22% 20%, rgba(99, 226, 215, .38), transparent 14%),
+    radial-gradient(ellipse at 77% 38%, rgba(103, 203, 192, .3), transparent 12%),
+    radial-gradient(ellipse at 48% 79%, rgba(138, 232, 202, .22), transparent 13%),
+    radial-gradient(ellipse at 87% 87%, rgba(47, 174, 190, .25), transparent 15%);
+  filter: blur(25px); transform: translate3d(0, var(--caustic-shift, 0px), 0);
+  animation: caustic-breathe 12s ease-in-out infinite alternate;
+}
+.current-lines {
+  background: repeating-radial-gradient(ellipse at 50% 50%, transparent 0 58px, rgba(109, 217, 207, .13) 59px 60px, transparent 61px 94px);
+  mask-image: linear-gradient(180deg, transparent, #000 22%, #000 80%, transparent);
+}
+.current-back { opacity: .22; transform: rotate(-13deg) translate3d(0, var(--current-back-shift, 0px), 0) scale(1.12); }
+.current-front { opacity: .11; background-size: 760px 590px; transform: rotate(12deg) translate3d(0, var(--current-front-shift, 0px), 0) scale(1.3); }
+.water-specks {
+  opacity: .24; inset: 0 !important;
+  background-image: radial-gradient(circle, rgba(180, 238, 216, .75) 0 1px, transparent 1.7px),
+    radial-gradient(circle, rgba(83, 208, 214, .72) 0 1px, transparent 1.8px);
+  background-size: 137px 151px, 223px 197px; background-position: 0 0, 51px 83px;
+  transform: translate3d(0, var(--speck-shift, 0px), 0);
+}
+.hero, .approach, .system, .site-footer { position: relative; z-index: 1; }
+.approach { overflow: hidden; background: linear-gradient(112deg, rgba(240, 244, 235, .97), rgba(240, 244, 235, .92)); }
+.approach::before, .system::before {
+  content: ""; position: absolute; z-index: 0; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse at 85% 42%, rgba(36, 152, 149, .14), transparent 30%),
+    repeating-radial-gradient(ellipse at 82% 45%, transparent 0 70px, rgba(30, 127, 132, .10) 71px 72px, transparent 73px 113px);
+  transform: translate3d(0, var(--section-water-shift, 0px), 0);
+}
+.approach > *, .system > * { position: relative; z-index: 1; }
+.system { overflow: hidden; background: linear-gradient(145deg, rgba(9, 36, 48, .96), rgba(6, 27, 38, .93)); }
+.system::before { opacity: .47; background: radial-gradient(ellipse at 83% 21%, rgba(58, 176, 174, .14), transparent 33%), repeating-radial-gradient(ellipse at 78% 35%, transparent 0 85px, rgba(102, 210, 207, .10) 86px 87px, transparent 88px 133px); }
+.site-footer { background: rgba(6, 27, 38, .92); }
+@keyframes caustic-breathe { from { scale: .97; opacity: .2; } to { scale: 1.04; opacity: .38; } }
