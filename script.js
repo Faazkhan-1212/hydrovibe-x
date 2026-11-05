@@ -14,6 +14,7 @@
   let pointerTiltX = 0;
   let pointerTiltY = 0;
   let pointerTiltZ = 0;
+  let statusAnimationFrame = 0;
 
   const details = {
     matrix: ["5 × 5 sensor matrix", "A proposed sensor interface grid gathers signals from multiple water-monitoring points."],
@@ -42,7 +43,15 @@
   };
 
   const setStatus = (message) => {
-    if (statusOutput) statusOutput.textContent = message;
+    if (!statusOutput || statusOutput.textContent === message) return;
+    statusOutput.textContent = message;
+    if (!reducedMotion.matches) {
+      statusOutput.classList.remove("is-updating");
+      void statusOutput.offsetWidth;
+      statusOutput.classList.add("is-updating");
+      cancelAnimationFrame(statusAnimationFrame);
+      statusAnimationFrame = requestAnimationFrame(() => statusOutput.classList.remove("is-updating"));
+    }
   };
   const restoreStatus = () => {
     if (hoveredPart && details[hoveredPart]) {
@@ -56,6 +65,12 @@
     if (!countOutput || !progressFill) return;
     countOutput.textContent = String(identified.size);
     progressFill.style.width = `${(identified.size / parts.length) * 100}%`;
+    document.querySelector(".build-log")?.classList.toggle("is-complete", identified.size === parts.length && parts.length > 0);
+    if (!reducedMotion.matches) {
+      countOutput.classList.remove("is-bumping");
+      void countOutput.offsetWidth;
+      countOutput.classList.add("is-bumping");
+    }
   };
 
   parts.forEach((part) => {
