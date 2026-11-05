@@ -54,3 +54,61 @@
 
   scheduleMotion();
 })();
+
+// Keep the sketch labels and function card synchronized for mouse, touch, and keyboard.
+(() => {
+  const partDetails = {
+    canopy: {
+      number: "01 / 06",
+      title: "Canopy + solar panel",
+      description: "The canopy shelters the central treatment assembly. Its proposed solar panel can supplement onboard power; actual output depends on panel size, sunlight, and system load."
+    },
+    algae: {
+      number: "02 / 06",
+      title: "Replaceable algae filter pod",
+      description: "The removable cartridge is the proposed phycoremediation chamber. Selected algae may take up nutrients; the cartridge needs maintenance and safe handling after use."
+    },
+    intake: {
+      number: "03 / 06",
+      title: "Water intake",
+      description: "The intake draws surrounding water into the treatment path, where a pre-filter can catch larger debris before water reaches the algae chamber."
+    },
+    pontoon: {
+      number: "04 / 06",
+      title: "Floating pontoons",
+      description: "The paired pontoons support the craft on the water and are designed to help keep the central purification assembly stable. Buoyancy and stability need testing on the finished build."
+    },
+    dock: {
+      number: "05 / 06",
+      title: "Bank-side charging dock",
+      description: "The shore dock is a proposed home point for recharging, inspection, maintenance, and data transfer. Automatic return and docking require navigation and alignment control."
+    },
+    outlet: {
+      number: "06 / 06",
+      title: "Treated-water outlet",
+      description: "Water leaves after the proposed treatment and post-filter stages. Outlet readings should be compared with intake readings; this concept does not certify water as safe to drink."
+    }
+  };
+  const controls = document.querySelectorAll("[data-part]");
+  const title = document.getElementById("sketch-part-title");
+  const description = document.getElementById("sketch-part-description");
+  const number = document.getElementById("sketch-number");
+  if (!controls.length || !title || !description || !number) return;
+
+  const selectPart = (key) => {
+    const detail = partDetails[key];
+    if (!detail) return;
+    title.textContent = detail.title;
+    description.textContent = detail.description;
+    number.textContent = detail.number;
+    controls.forEach((control) => {
+      const selected = control.dataset.part === key;
+      control.classList.toggle("is-active", selected);
+      control.setAttribute("aria-pressed", String(selected));
+    });
+  };
+
+  controls.forEach((control) => {
+    control.addEventListener("click", () => selectPart(control.dataset.part));
+  });
+})();

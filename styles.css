@@ -270,3 +270,32 @@ h1, h2 { font-family: "Manrope", sans-serif; }
   .scene-note { bottom: 14px; right: 18px; }
 }
 @media (prefers-reduced-motion: reduce) { .drone-frame { animation: none; } }
+
+/* Clickable reference drawing and component function panel. */
+.sketch-section { padding-top: 116px; padding-bottom: 108px; color: #0c2b32; background: #eaf1e9; }
+.sketch-section .section-kicker { color: #347b7c; }
+.sketch-heading { display: flex; align-items: end; justify-content: space-between; gap: 36px; }
+.sketch-heading h2 { margin: 22px 0 0; font-size: clamp(42px, 5vw, 68px); line-height: 1.02; letter-spacing: -.06em; font-weight: 600; }
+.sketch-heading h2 span { color: #188183; }
+.sketch-heading > p { max-width: 360px; margin: 0 0 5px; color: #536c6e; font-size: 14px; line-height: 1.8; }
+.sketch-layout { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(260px, .65fr); gap: 20px; margin-top: 45px; align-items: stretch; }
+.sketch-stage { position: relative; align-self: start; margin: 0; overflow: hidden; background: #fff; border: 1px solid rgba(17,73,76,.16); box-shadow: 0 24px 60px rgba(9,45,47,.12); }
+.sketch-stage > img { display: block; width: 100%; height: auto; }
+.sketch-pin { position: absolute; left: var(--x); top: var(--y); display: grid; place-items: center; width: 34px; height: 34px; padding: 0; border: 2px solid #fff; border-radius: 50%; color: #06323a; background: #b7eb58; box-shadow: 0 2px 16px rgba(4,38,43,.38); font: 700 10px "Manrope",sans-serif; cursor: pointer; transform: translate(-50%,-50%); transition: background .18s, color .18s, scale .18s; }
+.sketch-pin:hover, .sketch-pin.is-active { color: #fff; background: #087c8c; scale: 1.12; }
+.sketch-pin:focus-visible, .sketch-selector:focus-visible { outline: 3px solid #22a6b5; outline-offset: 3px; }
+.sketch-details { display: flex; flex-direction: column; padding: 27px 25px 23px; color: #f2f8f7; background: linear-gradient(145deg,#0b3543,#092430); border: 1px solid rgba(17,73,76,.2); }
+.sketch-detail-label { display: flex; align-items: center; gap: 9px; color: #9ee5df; font-size: 9px; letter-spacing: .18em; font-weight: 700; }
+.sketch-live-dot { width: 7px; height: 7px; border-radius: 50%; background: #b7eb58; box-shadow: 0 0 10px rgba(183,235,88,.8); }
+.sketch-detail-number { margin: 30px 0 11px; color: #b7eb58; font: 600 11px "Manrope",sans-serif; letter-spacing: .14em; }
+.sketch-details h3 { margin-bottom: 11px; font: 600 clamp(20px,2vw,27px)/1.15 "Manrope",sans-serif; letter-spacing: -.04em; }
+.sketch-part-description { margin: 0; color: #b7c9ca; font-size: 12px; line-height: 1.75; }
+.sketch-selectors { display: grid; gap: 7px; margin-top: 25px; }
+.sketch-selector { display: flex; align-items: center; width: 100%; min-height: 38px; padding: 8px 11px; border: 1px solid rgba(220,246,240,.14); color: #c5d7d6; background: rgba(255,255,255,.035); text-align: left; font: 500 11px "DM Sans",sans-serif; cursor: pointer; transition: background .18s,border-color .18s,color .18s; }
+.sketch-selector::before { content: ""; flex: 0 0 6px; height: 6px; margin-right: 10px; border-radius: 50%; background: #5babb0; }
+.sketch-selector:hover, .sketch-selector.is-active { color: #fff; border-color: rgba(183,235,88,.58); background: rgba(183,235,88,.10); }
+.sketch-selector.is-active::before { background: #b7eb58; box-shadow: 0 0 8px rgba(183,235,88,.65); }
+.sketch-note { margin: 18px 0 0; color: #5b7375; font-size: 10px; line-height: 1.7; }
+.sketch-note span { margin-right: 6px; color: #178286; }
+@media (max-width: 900px) { .sketch-section { padding-block: 88px; } .sketch-layout { grid-template-columns: minmax(0,1.35fr) minmax(230px,.8fr); gap: 13px; } .sketch-details { padding: 20px 18px; } }
+@media (max-width: 620px) { .sketch-section { padding: 76px 23px; } .sketch-heading { display: block; } .sketch-heading > p { margin-top: 18px; font-size: 13px; } .sketch-heading h2 { font-size: clamp(39px,11.5vw,57px); } .sketch-layout { grid-template-columns: 1fr; gap: 12px; margin-top: 30px; } .sketch-pin { width: 28px; height: 28px; font-size: 9px; } .sketch-details { padding: 21px 19px; } .sketch-detail-number { margin-top: 21px; } .sketch-selectors { grid-template-columns: 1fr 1fr; gap: 6px; } .sketch-selector { min-height: 42px; padding: 7px; font-size: 10px; } .sketch-selector::before { margin-right: 7px; } }
