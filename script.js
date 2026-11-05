@@ -1,56 +1,151 @@
-// Keep scroll and pointer motion lightweight: only a few transforms are updated per frame.
+// Scroll motion, component identification, and the live build-log widget.
 (() => {
-  const hero = document.querySelector(".hero");
-  const drone = document.querySelector(".drone-frame");
-  const water = document.querySelector(".scene-water");
-  const pageRoot = document.documentElement;
+  const board = document.querySelector("#circuit-board");
+  const parts = [...document.querySelectorAll(".board-part")];
+  const countOutput = document.querySelector("#identified-count");
+  const progressFill = document.querySelector("#build-progress-fill");
+  const statusOutput = document.querySelector("#build-status");
+  const resetButton = document.querySelector("#reset-build");
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-
-  if (!hero || !drone || reducedMotion.matches) return;
-
+  const identified = new Set();
+  let activeSection = "home";
+  let hoveredPart = null;
   let frame = 0;
-  let pointerX = 0;
-  let pointerY = 0;
+  let pointerTiltX = 0;
+  let pointerTiltZ = 0;
 
-  const updateMotion = () => {
-    const bounds = hero.getBoundingClientRect();
-    const progress = Math.max(-1, Math.min(1, -bounds.top / Math.max(bounds.height, 1)));
-    const pageScroll = window.scrollY || 0;
-    const scrollShift = Math.max(-10, Math.min(10, progress * 12));
-    drone.style.setProperty("--scroll-shift", `${scrollShift}px`);
-    drone.style.setProperty("--pointer-x", `${pointerX}px`);
-    drone.style.setProperty("--pointer-y", `${pointerY}px`);
-    if (water) water.style.setProperty("--water-shift", `${progress * 7}px`);
-    // The fixed water layers move at different speeds to create depth as the page scrolls.
-    pageRoot.style.setProperty("--caustic-shift", `${pageScroll * -0.055}px`);
-    pageRoot.style.setProperty("--current-back-shift", `${pageScroll * -0.12}px`);
-    pageRoot.style.setProperty("--current-front-shift", `${pageScroll * 0.075}px`);
-    pageRoot.style.setProperty("--speck-shift", `${pageScroll * -0.19}px`);
-    pageRoot.style.setProperty("--section-water-shift", `${pageScroll * 0.045}px`);
-    frame = 0;
+  const details = {
+    matrix: ["5 × 5 sensor matrix", "A proposed sensor interface grid gathers signals from multiple water-monitoring points."],
+    supercap: ["Supercapacitor bank", "Buffers short bursts of electrical energy for transient loads; capacity and power use require measurement."],
+    esp32: ["ESP32 controller", "Coordinates sensor readings and control logic in the prototype electronics concept."],
+    resistors: ["Resistor bank", "Sets signal levels and current limits for the board’s low-voltage sensing circuits."],
+    ph: ["pH sensor input", "Connects the pH probe interface for acidity or alkalinity measurements."],
+    turbidity: ["Turbidity sensor input", "Accepts readings from a sensor that estimates suspended particles in the water."],
+    temperature: ["Temperature sensor input", "Feeds water-temperature readings into the monitoring system."],
+    conductivity: ["Conductivity input", "Connects an electrical-conductivity probe to help characterize the sampled water."],
+    battery: ["Battery interface", "Connects the onboard battery and provides a monitored supply path for the system."],
+    solar: ["Solar input", "A proposed input for solar-assisted charging; real output depends on panel, sunlight, and charging control."],
+    pump: ["Pump driver", "Switches the water-pump load that moves water through the modular treatment path."],
+    motor: ["Propulsion motor driver", "Provides a controlled interface for the drone’s propulsion system."],
+    filter: ["Filter switching stage", "Controls a switched treatment component such as a valve or filtration stage, subject to the final hardware design."],
+    protection: ["Power protection", "Represents the fuse and transient-protection stage intended to protect power rails and attached modules."]
   };
 
-  const scheduleMotion = () => {
-    if (!frame) frame = requestAnimationFrame(updateMotion);
+  const sectionMessages = {
+    home: "Scroll the story to see the board rotate. Hover a part, then click to identify it.",
+    about: "Mission: a floating platform for treatment and before/after water monitoring.",
+    problem: "Challenge: water conditions vary across lakes and ponds; monitoring takes repeated effort.",
+    solution: "System path: intake, pre-filter, algae chamber, post-filter, then water checks.",
+    algae: "Biology: algae uptake is conditional; collected biomass needs safe handling.",
+    tracks: "Design domains: biology, robotics, sensing, and energy meet on this board."
   };
 
-  window.addEventListener("scroll", scheduleMotion, { passive: true });
-  window.addEventListener("resize", scheduleMotion, { passive: true });
+  const setStatus = (message) => {
+    if (statusOutput) statusOutput.textContent = message;
+  };
+  const restoreStatus = () => {
+    if (hoveredPart && details[hoveredPart]) {
+      const [name] = details[hoveredPart];
+      setStatus(`${name} — click to identify this component.`);
+    } else {
+      setStatus(sectionMessages[activeSection] || sectionMessages.home);
+    }
+  };
+  const updateCount = () => {
+    if (!countOutput || !progressFill) return;
+    countOutput.textContent = String(identified.size);
+    progressFill.style.width = `${(identified.size / parts.length) * 100}%`;
+  };
 
-  // Mouse depth cues are disabled on touch devices to avoid unnecessary work.
-  if (window.matchMedia("(pointer: fine)").matches) {
-    hero.addEventListener("pointermove", (event) => {
-      const rect = hero.getBoundingClientRect();
-      pointerX = ((event.clientX - rect.left) / rect.width - 0.5) * 8;
-      pointerY = ((event.clientY - rect.top) / rect.height - 0.5) * 5;
-      scheduleMotion();
-    }, { passive: true });
-    hero.addEventListener("pointerleave", () => {
-      pointerX = 0;
-      pointerY = 0;
-      scheduleMotion();
-    }, { passive: true });
+  parts.forEach((part) => {
+    const id = part.dataset.part;
+    const [name, purpose] = details[id] || [part.textContent.trim(), "Board component."];
+    part.title = `${name}: ${purpose}`;
+    part.addEventListener("pointerenter", () => {
+      hoveredPart = id;
+      setStatus(`${name}: ${purpose}`);
+    });
+    part.addEventListener("pointerleave", () => {
+      if (hoveredPart === id) hoveredPart = null;
+      restoreStatus();
+    });
+    part.addEventListener("focus", () => {
+      hoveredPart = id;
+      setStatus(`${name}: ${purpose}`);
+    });
+    part.addEventListener("blur", () => {
+      if (hoveredPart === id) hoveredPart = null;
+      restoreStatus();
+    });
+    part.addEventListener("click", () => {
+      if (!identified.has(id)) identified.add(id);
+      part.classList.add("is-identified");
+      part.setAttribute("aria-pressed", "true");
+      updateCount();
+      setStatus(`Identified ${name}. ${identified.size} of ${parts.length} parts logged.`);
+    });
+    part.setAttribute("aria-pressed", "false");
+  });
+
+  resetButton?.addEventListener("click", () => {
+    identified.clear();
+    parts.forEach((part) => {
+      part.classList.remove("is-identified");
+      part.setAttribute("aria-pressed", "false");
+    });
+    updateCount();
+    hoveredPart = null;
+    setStatus("Build log reset. Hover a board component and click to identify it.");
+  });
+
+  const sections = [...document.querySelectorAll(".story-section[id]")];
+  if ("IntersectionObserver" in window) {
+    const observer = new IntersectionObserver((entries) => {
+      const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+      if (!visible) return;
+      activeSection = visible.target.id;
+      if (!hoveredPart) restoreStatus();
+    }, { rootMargin: "-28% 0px -48% 0px", threshold: [0, .15, .35, .6] });
+    sections.forEach((section) => observer.observe(section));
   }
 
-  scheduleMotion();
+  const scheduleBoardMotion = () => {
+    if (!board || frame) return;
+    frame = requestAnimationFrame(() => {
+      const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+      const progress = Math.min(1, Math.max(0, window.scrollY / maxScroll));
+      if (!reducedMotion.matches) {
+        board.style.setProperty("--scroll-turn", `${(progress - .5) * 28}deg`);
+        board.style.setProperty("--scroll-lift", `${Math.sin(progress * Math.PI * 2) * 9}px`);
+        board.style.setProperty("--pointer-tilt-x", `${pointerTiltX}deg`);
+        board.style.setProperty("--pointer-tilt-z", `${pointerTiltZ}deg`);
+      }
+      frame = 0;
+    });
+  };
+  window.addEventListener("scroll", scheduleBoardMotion, { passive: true });
+  window.addEventListener("resize", scheduleBoardMotion, { passive: true });
+  if (board && window.matchMedia("(pointer: fine)").matches && !reducedMotion.matches) {
+    board.addEventListener("pointermove", (event) => {
+      const bounds = board.getBoundingClientRect();
+      pointerTiltX = ((event.clientY - bounds.top) / bounds.height - .5) * 7;
+      pointerTiltZ = ((event.clientX - bounds.left) / bounds.width - .5) * 5;
+      scheduleBoardMotion();
+    }, { passive: true });
+    board.addEventListener("pointerleave", () => {
+      pointerTiltX = 0;
+      pointerTiltZ = 0;
+      scheduleBoardMotion();
+    }, { passive: true });
+  }
+  scheduleBoardMotion();
 })();
+
+  const sketchSection = document.querySelector("#sketch");
+  const buildLog = document.querySelector(".build-log");
+  if (sketchSection && buildLog && "IntersectionObserver" in window) {
+    const sketchObserver = new IntersectionObserver(([entry]) => {
+      buildLog.classList.toggle("is-sketch-view", entry.isIntersecting);
+    }, { threshold: 0.08 });
+    sketchObserver.observe(sketchSection);
+  }
