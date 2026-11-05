@@ -110,31 +110,28 @@
             <div class="section-kicker">DESIGN STUDY · DIMENSIONED CONCEPT</div>
             <h2 id="sketch-title">Explore the<br /><span>drone sketch.</span></h2>
           </div>
-          <p>Select a label on the drawing or a component name to see what each part is designed to do.</p>
+          <p>Numbered marks on the drawing match the color-coded function legend beside it.</p>
         </div>
         <div class="sketch-layout">
           <figure class="sketch-stage">
             <img src="assets/hydrovibe-x-sketch.png" alt="Dimensioned HYDROVIBE-X concept drawing showing front, top, side, and sectional views of the floating water-purification drone." />
-            <button class="sketch-pin is-active" type="button" data-part="canopy" style="--x:51%;--y:22%" aria-label="Canopy and solar panel function" aria-pressed="true"><span>01</span></button>
-            <button class="sketch-pin" type="button" data-part="algae" style="--x:52%;--y:47%" aria-label="Algae filter pod function" aria-pressed="false"><span>02</span></button>
-            <button class="sketch-pin" type="button" data-part="intake" style="--x:42%;--y:71%" aria-label="Water intake function" aria-pressed="false"><span>03</span></button>
-            <button class="sketch-pin" type="button" data-part="pontoon" style="--x:73%;--y:72%" aria-label="Pontoon function" aria-pressed="false"><span>04</span></button>
-            <button class="sketch-pin" type="button" data-part="dock" style="--x:87%;--y:28%" aria-label="Charging dock function" aria-pressed="false"><span>05</span></button>
-            <button class="sketch-pin" type="button" data-part="outlet" style="--x:66%;--y:39%" aria-label="Treated water outlet function" aria-pressed="false"><span>06</span></button>
+            <span class="sketch-pin" style="--x:51%;--y:22%" aria-hidden="true">01</span>
+            <span class="sketch-pin" style="--x:52%;--y:47%" aria-hidden="true">02</span>
+            <span class="sketch-pin" style="--x:42%;--y:71%" aria-hidden="true">03</span>
+            <span class="sketch-pin" style="--x:73%;--y:72%" aria-hidden="true">04</span>
+            <span class="sketch-pin" style="--x:87%;--y:28%" aria-hidden="true">05</span>
+            <span class="sketch-pin" style="--x:66%;--y:39%" aria-hidden="true">06</span>
           </figure>
-          <aside class="sketch-details" aria-live="polite">
-            <div class="sketch-detail-label"><span class="sketch-live-dot"></span> COMPONENT FUNCTION</div>
-            <p class="sketch-detail-number" id="sketch-number">01 / 06</p>
-            <h3 id="sketch-part-title">Canopy + solar panel</h3>
-            <p class="sketch-part-description" id="sketch-part-description">The canopy shelters the central treatment assembly. Its proposed solar panel can supplement onboard power; actual output depends on panel size, sunlight, and system load.</p>
-            <div class="sketch-selectors" aria-label="Select a component to explore">
-              <button class="sketch-selector is-active" type="button" data-part="canopy" aria-pressed="true">Canopy + solar</button>
-              <button class="sketch-selector" type="button" data-part="algae" aria-pressed="false">Algae filter pod</button>
-              <button class="sketch-selector" type="button" data-part="intake" aria-pressed="false">Water intake</button>
-              <button class="sketch-selector" type="button" data-part="pontoon" aria-pressed="false">Pontoons</button>
-              <button class="sketch-selector" type="button" data-part="dock" aria-pressed="false">Charging dock</button>
-              <button class="sketch-selector" type="button" data-part="outlet" aria-pressed="false">Treated-water outlet</button>
-            </div>
+          <aside class="sketch-legend" aria-label="Numbered component function legend">
+            <div class="sketch-detail-label"><span class="sketch-live-dot"></span> COMPONENT FUNCTIONS</div>
+            <ol class="sketch-legend-list">
+              <li><span class="legend-number">01</span><div><h3>Canopy + solar panel</h3><p>Shelters the treatment assembly; solar power can supplement the battery, depending on sunlight and load.</p></div></li>
+              <li><span class="legend-number">02</span><div><h3>Algae filter pod</h3><p>Replaceable chamber for the proposed algae-based phycoremediation stage.</p></div></li>
+              <li><span class="legend-number">03</span><div><h3>Water intake</h3><p>Draws surrounding water into the treatment path and pre-filter.</p></div></li>
+              <li><span class="legend-number">04</span><div><h3>Floating pontoons</h3><p>Support flotation and help stabilize the central system.</p></div></li>
+              <li><span class="legend-number">05</span><div><h3>Charging dock</h3><p>Shore-side point for proposed recharging, inspection, and data transfer.</p></div></li>
+              <li><span class="legend-number">06</span><div><h3>Treated-water outlet</h3><p>Returns water after treatment; water quality still needs suitable testing.</p></div></li>
+            </ol>
           </aside>
         </div>
         <p class="sketch-note"><span aria-hidden="true">ⓘ</span> Dimensions and functions shown are part of the proposed design and require prototype validation.</p>

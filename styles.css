@@ -299,3 +299,46 @@ h1, h2 { font-family: "Manrope", sans-serif; }
 .sketch-note span { margin-right: 6px; color: #178286; }
 @media (max-width: 900px) { .sketch-section { padding-block: 88px; } .sketch-layout { grid-template-columns: minmax(0,1.35fr) minmax(230px,.8fr); gap: 13px; } .sketch-details { padding: 20px 18px; } }
 @media (max-width: 620px) { .sketch-section { padding: 76px 23px; } .sketch-heading { display: block; } .sketch-heading > p { margin-top: 18px; font-size: 13px; } .sketch-heading h2 { font-size: clamp(39px,11.5vw,57px); } .sketch-layout { grid-template-columns: 1fr; gap: 12px; margin-top: 30px; } .sketch-pin { width: 28px; height: 28px; font-size: 9px; } .sketch-details { padding: 21px 19px; } .sketch-detail-number { margin-top: 21px; } .sketch-selectors { grid-template-columns: 1fr 1fr; gap: 6px; } .sketch-selector { min-height: 42px; padding: 7px; font-size: 10px; } .sketch-selector::before { margin-right: 7px; } }
+
+/* Full-screen sketch view with a static, color-coded numbered legend. */
+.sketch-section { min-height: 100svh; padding: 112px clamp(22px,3vw,52px) 52px; }
+.sketch-heading { max-width: 1500px; margin-inline: auto; }
+.sketch-heading > p { max-width: 410px; }
+.sketch-layout { width: 100%; max-width: 1800px; grid-template-columns: minmax(0,1fr) minmax(280px,340px); gap: clamp(18px,2vw,34px); align-items: center; margin: 28px auto 0; }
+.sketch-stage { width: 100%; height: min(64svh, 720px); min-height: 360px; display: grid; place-items: center; }
+.sketch-stage > img { width: 100%; height: 100%; object-fit: contain; }
+.sketch-pin { pointer-events: none; cursor: default; width: clamp(29px,2.4vw,38px); height: clamp(29px,2.4vw,38px); border-width: 2px; font-size: clamp(9px,.72vw,12px); translate: -50% -50%; }
+.sketch-legend { align-self: stretch; display: flex; flex-direction: column; padding: clamp(18px,2vw,28px); color: #f2f8f7; background: linear-gradient(145deg,#0b3543,#092430); border: 1px solid rgba(17,73,76,.2); }
+.sketch-legend-list { display: grid; grid-template-rows: repeat(6,minmax(0,1fr)); gap: 7px; margin: 18px 0 0; padding: 0; list-style: none; }
+.sketch-legend-list li { display: grid; grid-template-columns: 34px 1fr; gap: 10px; align-content: start; padding: 11px 0; border-top: 1px solid rgba(220,246,240,.13); }
+.legend-number { color: var(--legend-tone); font: 800 13px/1.4 "Manrope",sans-serif; letter-spacing: .04em; }
+.sketch-legend-list li h3 { margin: 0 0 4px; color: var(--legend-tone); font: 700 12px/1.35 "Manrope",sans-serif; }
+.sketch-legend-list li p { margin: 0; color: color-mix(in srgb,var(--legend-tone) 55%,#d7e3df); font-size: 10px; line-height: 1.48; }
+.sketch-legend-list li:nth-child(1) { --legend-tone:#79e4ef; }
+.sketch-legend-list li:nth-child(2) { --legend-tone:#b7eb58; }
+.sketch-legend-list li:nth-child(3) { --legend-tone:#ffd166; }
+.sketch-legend-list li:nth-child(4) { --legend-tone:#ff9f7a; }
+.sketch-legend-list li:nth-child(5) { --legend-tone:#c1a6ff; }
+.sketch-legend-list li:nth-child(6) { --legend-tone:#65d6b5; }
+.sketch-note { max-width: 1500px; margin: 16px auto 0; }
+@media (max-width: 900px) {
+  .sketch-section { padding-block: 98px 42px; }
+  .sketch-layout { grid-template-columns: minmax(0,1fr) minmax(250px, .62fr); }
+  .sketch-stage { height: min(62svh, 620px); min-height: 330px; }
+  .sketch-legend { padding: 18px 15px; }
+  .sketch-legend-list { gap: 2px; }
+  .sketch-legend-list li { grid-template-columns: 27px 1fr; gap: 7px; padding: 8px 0; }
+  .sketch-legend-list li h3 { font-size: 11px; }
+  .sketch-legend-list li p { font-size: 9px; }
+}
+@media (max-width: 620px) {
+  .sketch-section { min-height: 0; padding: 76px 18px 58px; }
+  .sketch-layout { grid-template-columns: 1fr; gap: 13px; margin-top: 25px; }
+  .sketch-stage { height: auto; min-height: 0; aspect-ratio: 16 / 9; }
+  .sketch-stage > img { height: 100%; }
+  .sketch-pin { width: 26px; height: 26px; font-size: 9px; }
+  .sketch-legend { padding: 19px 18px; }
+  .sketch-legend-list { grid-template-columns: 1fr 1fr; grid-template-rows: none; gap: 0 14px; }
+  .sketch-legend-list li { grid-template-columns: 25px 1fr; }
+  .sketch-legend-list li p { font-size: 9px; }
+}
