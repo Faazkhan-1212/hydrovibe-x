@@ -12,6 +12,7 @@
   let hoveredPart = null;
   let frame = 0;
   let pointerTiltX = 0;
+  let pointerTiltY = 0;
   let pointerTiltZ = 0;
 
   const details = {
@@ -115,9 +116,13 @@
       const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
       const progress = Math.min(1, Math.max(0, window.scrollY / maxScroll));
       if (!reducedMotion.matches) {
-        board.style.setProperty("--scroll-turn", `${(progress - .5) * 28}deg`);
+        const rotationPhase = progress * Math.PI * 2;
+        board.style.setProperty("--scroll-rotate-x", `${Math.sin(rotationPhase) * 11}deg`);
+        board.style.setProperty("--scroll-rotate-y", `${Math.sin(rotationPhase + Math.PI / 2) * 15}deg`);
+        board.style.setProperty("--scroll-rotate-z", `${(progress - .5) * 24}deg`);
         board.style.setProperty("--scroll-lift", `${Math.sin(progress * Math.PI * 2) * 9}px`);
         board.style.setProperty("--pointer-tilt-x", `${pointerTiltX}deg`);
+        board.style.setProperty("--pointer-tilt-y", `${pointerTiltY}deg`);
         board.style.setProperty("--pointer-tilt-z", `${pointerTiltZ}deg`);
       }
       frame = 0;
@@ -129,11 +134,13 @@
     board.addEventListener("pointermove", (event) => {
       const bounds = board.getBoundingClientRect();
       pointerTiltX = ((event.clientY - bounds.top) / bounds.height - .5) * 7;
+      pointerTiltY = ((event.clientX - bounds.left) / bounds.width - .5) * 8;
       pointerTiltZ = ((event.clientX - bounds.left) / bounds.width - .5) * 5;
       scheduleBoardMotion();
     }, { passive: true });
     board.addEventListener("pointerleave", () => {
       pointerTiltX = 0;
+      pointerTiltY = 0;
       pointerTiltZ = 0;
       scheduleBoardMotion();
     }, { passive: true });
