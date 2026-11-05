@@ -239,3 +239,34 @@ h1, h2 { font-family: "Manrope", sans-serif; }
 .system::before { opacity: .47; background: radial-gradient(ellipse at 83% 21%, rgba(58, 176, 174, .14), transparent 33%), repeating-radial-gradient(ellipse at 78% 35%, transparent 0 85px, rgba(102, 210, 207, .10) 86px 87px, transparent 88px 133px); }
 .site-footer { background: rgba(6, 27, 38, .92); }
 @keyframes caustic-breathe { from { scale: .97; opacity: .2; } to { scale: 1.04; opacity: .38; } }
+
+/* Hero uses the supplied HYDROVIBE-X dimensioned watercraft artwork. */
+.hero-scene { background: #133e50; }
+.scene-sky, .distant-shore, .scene-water, .water-glint, .wake, .flow-trail, .bubbles { display: none; }
+.drone-frame { width: 100%; height: 100%; min-height: 0; left: 50%; top: 50%; overflow: hidden; filter: none; border-radius: 0; }
+.drone-image { inset: 0; background-image: url("assets/hydrovibe-x-dimensions.png"); background-size: cover; background-position: center 52%; -webkit-mask-image: none; mask-image: none; }
+.drone-light { display: none; }
+.scene-vignette { background: linear-gradient(90deg, rgba(4,19,28,.72), rgba(4,19,28,.36) 30%, transparent 66%), linear-gradient(0deg, rgba(4,21,29,.32), transparent 38%, transparent 82%, rgba(4,20,29,.16)); }
+.hero-copy { left: clamp(24px, 6vw, 90px); top: auto; bottom: 95px; width: min(500px, 42vw); transform: none; padding: 24px 27px; border: 1px solid rgba(226,247,238,.18); background: rgba(5,31,43,.74); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+.hero h1 { margin-top: 16px; font-size: clamp(44px, 5.1vw, 72px); }
+.hero-description { font-size: 13px; margin-bottom: 20px; }
+.hero-footnote { margin-top: 16px; }
+@media (max-width: 900px) {
+  .drone-frame { width: 100%; height: 100%; left: 50%; top: 50%; }
+  .drone-image { background-size: cover; background-position: center 50%; }
+  .scene-vignette { background: linear-gradient(90deg, rgba(4,19,28,.52), rgba(4,19,28,.16) 42%, transparent 82%), linear-gradient(0deg, rgba(4,21,29,.42), transparent 42%, transparent 78%, rgba(4,20,29,.14)); }
+  .hero-copy { left: 6vw; bottom: 90px; width: min(500px, 58vw); }
+}
+@media (max-width: 620px) {
+  .hero { min-height: 900px; }
+  .hero-scene { height: 580px; background: #153d50; }
+  .drone-frame { top: 42%; left: 50%; width: 100%; height: 100%; animation: none; }
+  .drone-image { background-size: contain; background-position: center 46%; }
+  .scene-vignette { background: linear-gradient(180deg, rgba(5,24,35,.08), transparent 55%, rgba(4,21,29,.42) 100%); }
+  .hero-copy { left: 18px; bottom: 48px; width: calc(100% - 36px); padding: 20px; }
+  .hero h1 { font-size: clamp(40px, 11vw, 54px); }
+  .hero-description { font-size: 12px; }
+  .scene-caption { top: 86px; right: 18px; }
+  .scene-note { bottom: 14px; right: 18px; }
+}
+@media (prefers-reduced-motion: reduce) { .drone-frame { animation: none; } }
